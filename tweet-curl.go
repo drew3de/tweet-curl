@@ -1,17 +1,17 @@
 package main
 
 import (
-	  "fmt"
+      "fmt"
       "io/ioutil"
       "log"
       "net/http"
-	  "strings"
+      "strings"
       "os"
 )
 
 var (
-	tweetURL string 
-	userAgent string
+    tweetURL string 
+    userAgent string
     err error
 )
 
@@ -30,7 +30,7 @@ func substr(str string, start string, end string) (result string) {
 }
 
 func main() {
-	client := &http.Client{}
+    client := &http.Client{}
     url := os.Args[1] + "|"
     tweetURL = "https://nitter.net/" + substr(url, "https://twitter.com/", "|")
     userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
@@ -38,15 +38,15 @@ func main() {
     req, err := http.NewRequest("GET", tweetURL, nil)
     check(err)
 
-	req.Header.Set("User-Agent", userAgent)
+    req.Header.Set("User-Agent", userAgent)
 
-	resp, err := client.Do(req)
+    resp, err := client.Do(req)
     check(err)
 	
-	defer resp.Body.Close()
+    defer resp.Body.Close()
     body, err := ioutil.ReadAll(resp.Body)
     check(err)
 	
-	tweet := substr(string(body), "<div class=\"tweet-content media-body\" dir=\"auto\">", "</div>")
+    tweet := substr(string(body), "<div class=\"tweet-content media-body\" dir=\"auto\">", "</div>")
     fmt.Println(tweet)
 }
